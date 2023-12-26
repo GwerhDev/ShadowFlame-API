@@ -1,26 +1,37 @@
+const bnet = require("bnet");
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const { loginBnet } = require("../integrations/bnet");
+const { loginBnet, getAccessToken } = require("../integrations/bnet");
 const userSchema = require("../models/User");
+const { clientUrl, bnetClient, bnetSecret } = require("../config");
+const { createToken } = require("../integrations/jwt");
 
 passport.use('login-bnet', loginBnet);
 
-passport.serializeUser((profile, done) => {
-  done(null, profile);
+passport.serializeUser((user, done) => {
+  done(null, user);
 });
 
-passport.deserializeUser((profile, done) => {
-  done(null, profile);
+passport.deserializeUser((user, done) => {
+  done(null, user);
 });
 
 router.get('/', passport.authenticate('login-bnet'));
 
 router.get('/callback', async (req, res) => {
   try {
-    const profile = req.session.passport.profile;
-    console.log(profile)
-    const userExist = await userSchema.findOne({email: profile.email});
+    const user = {
+      email: "asd"
+    };
+
+    const { code } = req.query || null;
+    
+    const accessToken = await getAccessToken(code);
+
+    console.log(accessToken);
+
+    const userExist = await userSchema.findOne({email: user.email});
     
     if (userExist) {
       const { _id, role } = userExist;
@@ -29,10 +40,11 @@ router.get('/callback', async (req, res) => {
 
       return res.status(200).redirect(`${clientUrl}/#/auth?token=${token}`);
     } else {
-      return res.status(400).redirect(`${clientUrl}/#/auth?token=none`);
+      return res.status(400).redirect(`${clientUrl}/#/auth?token=not_found`);
     }
   } catch (error) {
-    return res.status(400).redirect(`${clientUrl}/#/auth?token=none`);
+    console.error(error);
+    return res.status(400).redirect(`${clientUrl}/#/auth?token=error`);
   }
 });
 
