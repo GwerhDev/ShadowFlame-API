@@ -4,7 +4,7 @@ const BnetStrategy = require('passport-bnet').Strategy;
 const loginBnet = new BnetStrategy({
   clientID: bnetClient,
   clientSecret: bnetSecret,
-  callbackURL: apiUrl,
+  callbackURL: `${apiUrl}/login/callback`,
   region: "us"
   }, function (accessToken, refreshToken, profile, done) {
     process.nextTick(async function () {

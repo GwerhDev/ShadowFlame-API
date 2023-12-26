@@ -2,17 +2,21 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const { loginBnet } = require("../integrations/bnet");
+const userSchema = require("../models/User");
 
 passport.use('login-bnet', loginBnet);
 
-router.get('/', passport.authenticate('bnet'));
+passport.serializeUser((profile, done) => {
+  done(null, profile);
+});
 
-router.get('/callback', passport.authenticate('login-google', {
-  successRedirect: '/login/success',
-  failureRedirect: '/login/failure'
-}));
+passport.deserializeUser((profile, done) => {
+  done(null, profile);
+});
 
-router.get('/success', async (req, res) => {
+router.get('/', passport.authenticate('login-bnet'));
+
+router.get('/callback', async (req, res) => {
   try {
     const profile = req.session.passport.profile;
     console.log(profile)
