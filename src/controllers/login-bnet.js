@@ -10,11 +10,17 @@ passport.use('login-bnet', loginBnet);
 
 router.get('/', passport.authenticate('login-bnet'));
 
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+
+passport.deserializeUser((user, done) => {
+  done(null, user);
+});
+
 router.get('/callback', async (req, res) => {
   try {
-    console.log(req.query)
-
-    const user = {
+/*     const user = {
       email: "asd"
     };
 
@@ -28,7 +34,8 @@ router.get('/callback', async (req, res) => {
       return res.status(200).redirect(`${clientUrl}/#/auth?token=${token}`);
     } else {
       return res.status(400).redirect(`${clientUrl}/#/auth?token=not_found`);
-    }
+    } */
+    return res.status(200).redirect(`${clientUrl}`);
   } catch (error) {
     console.error(error);
     return res.status(500).redirect(`${clientUrl}/#/auth?token=error`);

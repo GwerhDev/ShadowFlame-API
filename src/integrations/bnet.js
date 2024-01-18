@@ -9,8 +9,10 @@ const loginBnet = new BnetStrategy({
   region: "us",
   scope: "openid"
 }, function (accessToken, refreshToken, profile, done) {
-  console.log("asdasd")
-  return done(null, profile);
+  process.nextTick(function () {
+    console.log(profile)
+    return done(null, profile);
+  });
 });
 
 module.exports = {
