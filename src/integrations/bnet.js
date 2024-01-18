@@ -4,7 +4,7 @@ const BnetStrategy = require('passport-bnet').Strategy;
 const loginBnet = new BnetStrategy({
   clientID: bnetClient,
   clientSecret: bnetSecret,
-  callbackURL: `${apiUrl}/login/callback`,
+  callbackURL: `${apiUrl}/login-bnet/callback`,
   state: 200,
   region: "us",
   scope: "openid"
