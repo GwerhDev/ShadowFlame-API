@@ -7,10 +7,9 @@ const loginBnet = new BnetStrategy({
   callbackURL: `${apiUrl}/login-bnet/callback`,
   state: 200,
   region: "us",
-  scope: "openid"
+  scope: "openid",
 }, function (accessToken, refreshToken, profile, done) {
   process.nextTick(function () {
-    console.log(profile)
     return done(null, profile);
   });
 });

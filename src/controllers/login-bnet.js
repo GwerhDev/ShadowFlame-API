@@ -20,6 +20,8 @@ passport.deserializeUser((user, done) => {
 
 router.get('/callback', async (req, res) => {
   try {
+    console.log(req.query)
+    const { code, state } = req.query;
 /*     const user = {
       email: "asd"
     };
