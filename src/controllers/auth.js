@@ -6,6 +6,7 @@ const { message } = require('../messages');
 router.get("/", async(req, res) => {
   try {
     const userToken = req.headers.authorization;
+    console.log(userToken);
     const decodedToken = await decodeToken(userToken);
     const user = await userSchema.findOne({ _id: decodedToken.data.id });
     
@@ -13,11 +14,10 @@ router.get("/", async(req, res) => {
     
     const userData = {
       id: user._id,
-      username: user.username,
-      email: user.email,
+      battletag: user.battletag,
       role: user.role,
-      profilePic: user.profilePic
-    }
+      status: user.status
+    };
     
     return res.status(200).send({ logged: true, userData });
     

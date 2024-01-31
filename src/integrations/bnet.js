@@ -9,8 +9,17 @@ const loginBnet = new BnetStrategy({
   region: "us",
   scope: "openid",
 }, function (accessToken, refreshToken, profile, done) {
-  process.nextTick(function () {
-    return done(null, profile);
+  process.nextTick(async function () {
+    try {
+      const user = {
+        battlenetId: profile.id,
+        battletag: profile.battletag,
+        provider: profile.provider,
+      };
+      return done(null, user);
+    } catch (error) {
+      return done(error);
+    }
   });
 });
 
