@@ -25,7 +25,7 @@ router.get('/callback', passport.authenticate('login-bnet', {
 }));
 
 router.get('/failure', (req, res) => {
-  return res.status(400).redirect(`${clientUrl}/#/register/failed`);
+  return res.status(400).redirect(`${clientUrl}/`);
 });
 
 router.get('/success', async (req, res) => {
