@@ -11,10 +11,16 @@ router.get("/", async(req, res) => {
     const user = await userSchema.findOne({ _id: decodedToken.data.id });
     
     if(!user) return res.status(404).send({ logged: false, message: message.user.notfound });
+
+
+    const username = user.battletag.split("#")[0];
+    const discriminator = user.battletag.split("#")[1];
     
     const userData = {
       id: user._id,
       battletag: user.battletag,
+      username,
+      discriminator,
       role: user.role,
       status: user.status
     };
