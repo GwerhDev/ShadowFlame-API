@@ -42,10 +42,10 @@ router.get('/success', async (req, res) => {
 
     await newUser.save();
 
-    return res.status(200).redirect(`${clientUrl}/#/signup/success`);
+    return res.status(200).redirect(`${clientUrl}/#/signup/register-success`);
   } catch (error) {
     console.error(error);
-    return res.status(500).redirect(`${clientUrl}/#/signup/error`);
+    return res.status(500).redirect(`${clientUrl}/#/signup/register-error`);
   }
 });
 
