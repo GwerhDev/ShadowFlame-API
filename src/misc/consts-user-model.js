@@ -5,12 +5,12 @@ module.exports = {
   },
   roles: {
     admin: "admin",
-    freemium: "freemium",
-    subscriptor: "subscriptor"
+    member: "miembro",
+    leader: "líder"
   },
   methods: {
     inner: "inner",
-    google: "google",
+    bnet: "bnet",
     adminManagement: "admin-management"
   }
 }
