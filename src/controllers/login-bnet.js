@@ -5,6 +5,7 @@ const { loginBnet } = require("../integrations/bnet");
 const userSchema = require("../models/User");
 const { clientUrl } = require("../config");
 const { createToken } = require("../integrations/jwt");
+const { status } = require("../misc/consts-user-model");
 
 passport.use('login-bnet', loginBnet);
 
@@ -33,7 +34,9 @@ router.get('/success', async (req, res) => {
 
     const userExist = await userSchema.findOne({ battlenetId: user.battlenetId });
 
-    if (userExist) {
+    if (userExist && userExist.status === status.inactive) return res.status(400).redirect(`${clientUrl}/#/login/user-pending-approve`);
+    
+    if (userExist && userExist.status === status.active) {
       const { _id, role } = userExist;
       const data_login = { id: _id, role };
       const token = await createToken(data_login, 3);
