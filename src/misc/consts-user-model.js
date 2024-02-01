@@ -5,8 +5,8 @@ module.exports = {
   },
   roles: {
     admin: "admin",
-    member: "miembro",
-    leader: "líder"
+    member: "member",
+    leader: "leader"
   },
   methods: {
     inner: "inner",

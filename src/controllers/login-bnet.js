@@ -5,7 +5,6 @@ const { loginBnet } = require("../integrations/bnet");
 const userSchema = require("../models/User");
 const { clientUrl } = require("../config");
 const { createToken } = require("../integrations/jwt");
-const { roles, status } = require("../misc/consts-user-model");
 
 passport.use('login-bnet', loginBnet);
 
@@ -31,18 +30,6 @@ router.get('/failure', (req, res) => {
 router.get('/success', async (req, res) => {
   try {
     const user = req.session.passport.user;
-
-/*     const newUser = new userSchema({
-      battlenetId: user.battlenetId,
-      battletag: user.battletag,
-      provider: user.provider,
-      status: status.active,
-      role: roles.admin,
-    })
-
-    if (newUser.battletag === "Gwerh#1141") {
-      await newUser.save();
-    }; */
 
     const userExist = await userSchema.findOne({ battlenetId: user.battlenetId });
 
