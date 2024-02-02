@@ -1,5 +1,4 @@
-const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
 const passport = require("passport");
 const { loginBnet } = require("../integrations/bnet");
 const userSchema = require("../models/User");

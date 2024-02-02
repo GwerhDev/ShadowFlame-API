@@ -11,7 +11,6 @@ router.get("/", async(req, res) => {
     
     if(!user) return res.status(404).send({ logged: false, message: message.user.notfound });
 
-
     const username = user.battletag.split("#")[0];
     const discriminator = user.battletag.split("#")[1];
     
