@@ -45,6 +45,26 @@ router.post("/create", async(req, res) => {
   }
 });
 
+router.patch("/update/:id", async(req, res) => {
+  try {
+    const userToken = req.headers.authorization;
+    const decodedToken = await decodeToken(userToken);
+    const user = await userSchema.findOne({ _id: decodedToken.data.id });
+
+    if(!user) return res.status(404).send({ logged: false, message: message.user.notfound });
+
+    const { id } = req.params || null;
+    const { body } = req || null;
+
+    await taskSchema.findByIdAndUpdate(id, body);
+
+    return res.status(200).send({ message: message.task.updated });
+
+  } catch (error) {
+    return res.status(500).send({ error: message.user.error })
+  }  
+});
+
 router.delete("/delete/:id", async(req, res) => {
   try {
     const userToken = req.headers.authorization;
