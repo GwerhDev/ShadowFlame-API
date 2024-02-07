@@ -13,5 +13,7 @@ module.exports = {
   bnetClient: process.env.BNET_CLIENT,
   bnetSecret: process.env.BNET_SECRET,
 
-  privateSecret: process.env.PRIVATE_SECRET
+  cohereSecret: process.env.COHERE_SECRET,
+
+  privateSecret: process.env.PRIVATE_SECRET,
 }
