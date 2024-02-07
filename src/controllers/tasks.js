@@ -4,31 +4,39 @@ const taskSchema = require('../models/Task');
 const { decodeToken } = require('../integrations/jwt');
 const { message } = require('../messages');
 
-router.get("/", async(req, res) => {
+router.post("/", async (req, res) => {
   try {
     const userToken = req.headers.authorization;
     const decodedToken = await decodeToken(userToken);
+    const { date } = req.body || null;
+
     const user = await userSchema.findOne({ _id: decodedToken.data.id })
                                  .populate('task');
-    
-    if(!user) return res.status(404).send({ logged: false, message: message.user.notfound });
-    
+
+    if (!user) return res.status(404).send({ logged: false, message: message.user.notfound });
+
     const { task } = user || null;
+
+    const filteredTasks = task.filter(t => {
+      const taskDate = new Date(t.date).toISOString().substring(0, 10);
     
-    return res.status(200).send(task);
-    
+      return taskDate === date;
+    });
+
+    return res.status(200).send(filteredTasks);
+
   } catch (error) {
     return res.status(500).send({ error: message.user.error })
   }
 });
 
-router.post("/create", async(req, res) => {
+router.post("/create", async (req, res) => {
   try {
     const userToken = req.headers.authorization;
     const decodedToken = await decodeToken(userToken);
     const user = await userSchema.findOne({ _id: decodedToken.data.id });
 
-    if(!user) return res.status(404).send({ logged: false, message: message.user.notfound });
+    if (!user) return res.status(404).send({ logged: false, message: message.user.notfound });
 
     const { body } = req || null;
 
@@ -39,19 +47,19 @@ router.post("/create", async(req, res) => {
     await user.save();
 
     return res.status(200).send({ message: message.task.created });
-    
+
   } catch (error) {
     return res.status(500).send({ error: message.user.error })
   }
 });
 
-router.patch("/update/:id", async(req, res) => {
+router.patch("/update/:id", async (req, res) => {
   try {
     const userToken = req.headers.authorization;
     const decodedToken = await decodeToken(userToken);
     const user = await userSchema.findOne({ _id: decodedToken.data.id });
 
-    if(!user) return res.status(404).send({ logged: false, message: message.user.notfound });
+    if (!user) return res.status(404).send({ logged: false, message: message.user.notfound });
 
     const { id } = req.params || null;
     const { body } = req || null;
@@ -62,16 +70,16 @@ router.patch("/update/:id", async(req, res) => {
 
   } catch (error) {
     return res.status(500).send({ error: message.user.error })
-  }  
+  }
 });
 
-router.delete("/delete/:id", async(req, res) => {
+router.delete("/delete/:id", async (req, res) => {
   try {
     const userToken = req.headers.authorization;
     const decodedToken = await decodeToken(userToken);
     const user = await userSchema.findOne({ _id: decodedToken.data.id });
 
-    if(!user) return res.status(404).send({ logged: false, message: message.user.notfound });
+    if (!user) return res.status(404).send({ logged: false, message: message.user.notfound });
 
     const { id } = req.params || null;
 
@@ -82,7 +90,7 @@ router.delete("/delete/:id", async(req, res) => {
 
   } catch (error) {
     return res.status(500).send({ error: message.user.error })
-  }  
+  }
 });
 
 module.exports = router;
