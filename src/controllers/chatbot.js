@@ -9,9 +9,9 @@ router.post('/', async(req, res) => {
     const userToken = req.headers.authorization;
     const decodedToken = await decodeToken(userToken);
     const user = await userSchema.findOne({ _id: decodedToken.data.id });
-
+    
     if (!user) return res.status(404).send({ logged: false, message: message.user.notfound });
-
+    
     const { query } = req.body;
     const response = await aiCohere(query);
 
