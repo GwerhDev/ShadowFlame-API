@@ -8,7 +8,7 @@ const cohere = new CohereClient({
 const aiCohere = async (query) => {
   const prediction = await cohere.generate({
       prompt: query,
-      maxTokens: 200,
+      maxTokens: 400,
   });
   
   return prediction.generations[0].text;
