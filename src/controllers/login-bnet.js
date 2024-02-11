@@ -33,7 +33,8 @@ router.get('/success', async (req, res) => {
 
     const userExist = await userSchema.findOne({ battlenetId: user.battlenetId });
 
-    if (userExist && userExist.status === status.inactive) return res.status(400).redirect(`${clientUrl}/#/login/user-pending-approve`);
+    if (userExist && userExist.status === status.pending) return res.status(400).redirect(`${clientUrl}/#/login/user-pending-approve`);
+    if (userExist && userExist.status === status.inactive) return res.status(400).redirect(`${clientUrl}/#/login/user-inactive`);
     
     if (userExist && userExist.status === status.active) {
       const { _id, role } = userExist;

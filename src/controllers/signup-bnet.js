@@ -23,7 +23,7 @@ router.get('/callback', passport.authenticate('signup-bnet', {
 }));
 
 router.get('/failure', (req, res) => {
-  return res.status(400).redirect(`${clientUrl}/`);
+  return res.status(400).redirect(`${clientUrl}/#/signup/register-error`);
 });
 
 router.get('/success', async (req, res) => {
@@ -36,9 +36,9 @@ router.get('/success', async (req, res) => {
       battlenetId: user.battlenetId,
       battletag: user.battletag,
       provider: user.provider,
-      status: status.inactive,
+      status: status.pending,
       role: roles.member,
-    })
+    });
 
     await newUser.save();
 

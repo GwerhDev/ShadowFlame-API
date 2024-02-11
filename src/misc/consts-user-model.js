@@ -1,12 +1,14 @@
 module.exports = {
   status: {
     active: "active",
-    inactive: "inactive"
+    pending: "pending",
+    inactive: "inactive",
   },
   roles: {
     admin: "admin",
     member: "member",
-    leader: "leader"
+    clanleader: "clanleader",
+    warbandleader: "warbandleader",
   },
   methods: {
     inner: "inner",
