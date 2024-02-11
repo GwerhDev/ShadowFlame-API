@@ -11,13 +11,14 @@ router.post("/", async (req, res) => {
     const { date } = req.body || null;
 
     const user = await userSchema.findOne({ _id: decodedToken.data.id })
-                                 .populate('task');
+                                 .populate('mytasks');
 
     if (!user) return res.status(404).send({ logged: false, message: message.user.notfound });
 
-    const { task } = user || null;
+    const { mytasks } = user || null;
 
-    const filteredTasks = task.filter(t => {
+
+    const filteredTasks = mytasks.filter(t => {
       const taskDate = new Date(t.date).toISOString().substring(0, 10);
     
       return taskDate === date;
@@ -37,13 +38,13 @@ router.post("/create", async (req, res) => {
     const user = await userSchema.findOne({ _id: decodedToken.data.id });
 
     if (!user) return res.status(404).send({ logged: false, message: message.user.notfound });
-
+    
     const { body } = req || null;
-
+    
     const newTask = new myTasksSchema(body);
     await newTask.save();
-
-    user.task = [...user.task, newTask._id];
+    
+    user.mytasks = [...user.mytasks, newTask._id];
     await user.save();
 
     return res.status(200).send({ message: message.task.created });
