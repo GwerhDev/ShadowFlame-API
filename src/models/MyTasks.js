@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const taskSchema = new mongoose.Schema({
+const myTasksSchema = new mongoose.Schema({
   date: { type: Date, required: true },
   title: { type: String, required: true },
   index: { type: Number, required: true },
@@ -9,4 +9,4 @@ const taskSchema = new mongoose.Schema({
   repeatType: { type: String, required: false},
 });
 
-module.exports = mongoose.model('Task', taskSchema);
+module.exports = mongoose.model('MyTasks', myTasksSchema);

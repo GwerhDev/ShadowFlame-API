@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const userSchema = require('../models/User');
-const taskSchema = require('../models/Task');
+const myTasksSchema = require('../models/MyTasks');
 const { decodeToken } = require('../integrations/jwt');
 const { message } = require('../messages');
 
@@ -40,7 +40,7 @@ router.post("/create", async (req, res) => {
 
     const { body } = req || null;
 
-    const newTask = new taskSchema(body);
+    const newTask = new myTasksSchema(body);
     await newTask.save();
 
     user.task = [...user.task, newTask._id];
@@ -64,7 +64,7 @@ router.patch("/update/:id", async (req, res) => {
     const { id } = req.params || null;
     const { body } = req || null;
 
-    await taskSchema.findByIdAndUpdate(id, body);
+    await myTasksSchema.findByIdAndUpdate(id, body);
 
     return res.status(200).send({ message: message.task.updated });
 
@@ -83,7 +83,7 @@ router.delete("/delete/:id", async (req, res) => {
 
     const { id } = req.params || null;
 
-    await taskSchema.deleteOne({ _id: id });
+    await myTasksSchema.deleteOne({ _id: id });
     await userSchema.updateMany({ task: id }, { $pull: { task: id } });
 
     return res.status(200).send({ message: message.task.deleted });
