@@ -11,19 +11,18 @@ router.post("/", async (req, res) => {
     const { date } = req.body || null;
 
     const user = await userSchema.findOne({ _id: decodedToken.data.id })
-                                 .populate('clantasks');
+                                 .populate('mytasks');
 
     if (!user) return res.status(404).send({ logged: false, message: message.user.notfound });
 
     const { mytasks } = user || null;
 
-
-    const filteredTasks = mytasks.filter(t => {
+    const filteredTasks = mytasks?.filter(t => {
       const taskDate = new Date(t.date).toISOString().substring(0, 10);
     
       return taskDate === date;
     });
-
+  
     return res.status(200).send(filteredTasks);
 
   } catch (error) {
