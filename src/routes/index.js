@@ -6,6 +6,7 @@ const myTasks = require('../controllers/my-tasks');
 const clantasks = require('../controllers/clan-tasks');
 const loginBnet = require('../controllers/login-bnet');
 const signupBnet = require('../controllers/signup-bnet');
+const fixedTasks = require('../controllers/fixed-tasks');
 
 router.use("/auth", auth);
 router.use("/admin", admin);
@@ -14,5 +15,6 @@ router.use("/my-tasks", myTasks);
 router.use("/clan-tasks", clantasks);
 router.use("/login-bnet", loginBnet);
 router.use("/signup-bnet", signupBnet);
+router.use("/fixed-tasks", fixedTasks);
 
 module.exports = router;
