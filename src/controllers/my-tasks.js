@@ -13,24 +13,28 @@ router.post("/", async (req, res) => {
     const user = await userSchema.findOne({ _id: decodedToken.data.id })
       .populate('mytasks');
 
+    const fixedTasks = await myTasksSchema.find({ fixed: true });
+
     if (!user) return res.status(404).send({ logged: false, message: message.user.notfound });
-
+    
     const { mytasks } = user || null;
-
+    
     const tasks = mytasks.filter(task => {
-      return task.fixed || task.date.toISOString().substring(0, 10).includes(date);
+      return task.date.toISOString().substring(0, 10).includes(date);
     });
+    
+    const myTasks = [...tasks, ...fixedTasks];
 
-    const completed = tasks.filter(t => {
-      const res = t.completedDates.find(e => {
+    const completed = myTasks.filter(t => {
+      const res = t.completedDates?.find(e => {
         return e.toISOString().substring(0, 10) === date;
       });
       return res;
     });
 
-    const completedId = completed.map(e => e._id);
+    const completedId = completed.map(e => e._id) || [];
 
-    return res.status(200).send({ tasks, completed: completedId });
+    return res.status(200).send({ tasks: myTasks, completed: completedId });
 
   } catch (error) {
     return res.status(500).send({ error: message.user.error })
@@ -47,14 +51,14 @@ router.post("/create", async (req, res) => {
 
     const { body } = req || null;
 
-    body.date = new Date(body.date);
-
+    
     const newTask = new myTasksSchema(body);
     await newTask.save();
-
+    
     user.mytasks = [...user.mytasks, newTask._id];
+    
     await user.save();
-
+    
     return res.status(200).send({ message: message.task.created });
 
   } catch (error) {
