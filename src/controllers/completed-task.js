@@ -16,7 +16,7 @@ router.post("/create/:id", async (req, res) => {
     const { id } = req.params || null;
     const { date, type } = req.body || null;
 
-    const completedTaskExist = await completedTaskSchema.findOne({ date: new Date(date), user: user._id });
+    const completedTaskExist = await completedTaskSchema.findOne({ date: new Date(date), user: user._id, type });
 
     if (!completedTaskExist) {
       await completedTaskSchema.create({ task: id, date: new Date(date), type: type, user: user._id });
@@ -40,9 +40,9 @@ router.patch("/delete/:id", async (req, res) => {
     if (!user) return res.status(404).send({ logged: false, message: message.user.notfound });
 
     const { id } = req.params || null;
-    const { date } = req.body || null;
+    const { date, type } = req.body || null;
 
-    await completedTaskSchema.findOneAndUpdate({ date: new Date(date), user: user._id }, { $pull: { task: id } });
+    await completedTaskSchema.findOneAndUpdate({ date: new Date(date), user: user._id, type }, { $pull: { task: id } });
 
     return res.status(200).send({ message: message.task.updated });
 

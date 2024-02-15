@@ -13,14 +13,14 @@ router.post("/", async (req, res) => {
     const user = await userSchema.findOne({ _id: decodedToken.data.id });
     if (!user) return res.status(404).send({ logged: false, message: message.user.notfound });
 
-    const { date } = req.body || null;
+    const { date, type } = req.body || null;
 
     const response = [
-      ...await taskSchema.find({ fixed: true }), 
-      ...await taskSchema.find({ date: new Date(date), user: user._id })
+      ...await taskSchema.find({ fixed: true, type }), 
+      ...await taskSchema.find({ date: new Date(date), user: user._id, type })
     ];
     
-    const completedTaskDate = await completedTaskSchema.find({ user: user._id, date: new Date(date) });
+    const completedTaskDate = await completedTaskSchema.find({ user: user._id, date: new Date(date), type });
 
     const formattedResponse = response.map(task => {
       const { _id, title, date, fixed } = task;
