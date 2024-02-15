@@ -43,8 +43,8 @@ router.patch("/delete/:id", async (req, res) => {
     const { id } = req.params || null;
     const { date } = req.body || null;
     
-    await completedTaskSchema.findOneAndUpdate( date, { $pull: { task: id }});
-
+    await completedTaskSchema.findOneAndUpdate( {date: new Date(date)}, { $pull: { task: id }});
+    
     return res.status(200).send({ message: message.task.updated });
 
   } catch (error) {
