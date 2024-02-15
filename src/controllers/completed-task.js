@@ -16,10 +16,10 @@ router.post("/create/:id", async (req, res) => {
     const { id } = req.params || null;
     const { date, type } = req.body || null;
 
-    const completedTaskExist = await completedTaskSchema.findOne({ date: new Date(date) });
+    const completedTaskExist = await completedTaskSchema.findOne({ date: new Date(date), user: user._id });
 
     if (!completedTaskExist) {
-      const newCompletedTask = await completedTaskSchema.create({ task: id, date: new Date(date), type: type });
+      const newCompletedTask = await completedTaskSchema.create({ task: id, date: new Date(date), type: type, user: user._id });
       await userSchema.findByIdAndUpdate(decodedToken.data.id, { $push: { completedTask: newCompletedTask._id } });
     } else {
       await completedTaskSchema.findByIdAndUpdate(completedTaskExist._id, { $push: { task: id } });

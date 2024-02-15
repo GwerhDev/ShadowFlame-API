@@ -17,7 +17,10 @@ router.post("/", async (req, res) => {
 
     const { completedTask } = user || null;
 
-    const response = [...await taskSchema.find({ fixed: true }), ...await taskSchema.find({ date: new Date(req.body.date) })];
+    const response = [
+      ...await taskSchema.find({ fixed: true }), 
+      ...await taskSchema.find({ date: new Date(req.body.date), user: user._id })
+    ];
 
     const formattedResponse = response.map(task => {
       const { _id, title, date, fixed } = task;
@@ -32,7 +35,7 @@ router.post("/", async (req, res) => {
     return res.status(200).send(formattedResponse);
 
   } catch (error) {
-    return res.status(500).send({ error: message.user.error })
+    return res.status(500).send({ error: message.user.error });
   }
 });
 
