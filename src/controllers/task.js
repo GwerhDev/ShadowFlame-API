@@ -20,7 +20,6 @@ router.post("/", async (req, res) => {
       ...await taskSchema.find({ date: new Date(date), user: user._id })
     ];
     
-    console.log(response)
     const completedTaskDate = await completedTaskSchema.find({ user: user._id, date: new Date(date) });
 
     const formattedResponse = response.map(task => {
