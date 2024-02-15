@@ -1,20 +1,18 @@
 const router = require('express').Router();
 const auth = require('../controllers/auth');
+const task = require('../controllers/task');
 const admin = require('../controllers/admin');
 const chatbot = require('../controllers/chatbot');
-const myTasks = require('../controllers/my-tasks');
-const clantasks = require('../controllers/clan-tasks');
 const loginBnet = require('../controllers/login-bnet');
 const signupBnet = require('../controllers/signup-bnet');
-const fixedTasks = require('../controllers/fixed-tasks');
+const completedTask = require('../controllers/completed-task');
 
 router.use("/auth", auth);
+router.use("/task", task);
 router.use("/admin", admin);
 router.use("/chatbot", chatbot);
-router.use("/my-tasks", myTasks);
-router.use("/clan-tasks", clantasks);
 router.use("/login-bnet", loginBnet);
 router.use("/signup-bnet", signupBnet);
-router.use("/fixed-tasks", fixedTasks);
+router.use("/completed-task", completedTask);
 
 module.exports = router;

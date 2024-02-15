@@ -1,8 +1,8 @@
 const router = require('express').Router();
-const userSchema = require('../models/User');
-const fixedTasksSchema = require('../models/FixedTasks');
-const { decodeToken } = require('../integrations/jwt');
-const { message } = require('../messages');
+const userSchema = require('../../models/User');
+const taskSchema = require('../../models/Task');
+const { decodeToken } = require('../../integrations/jwt');
+const { message } = require('../../messages');
 
 router.post("/", async (req, res) => {
   try {
@@ -13,7 +13,7 @@ router.post("/", async (req, res) => {
     if (!user) return res.status(404).send({ logged: false, message: message.user.notfound });
 
     const { body } = req || null;
-    const fixedTasks = await fixedTasksSchema.find({ type: body.type });
+    const fixedTasks = await taskSchema.find({ type: body.type });
 
     return res.status(200).send(fixedTasks);
 
@@ -32,7 +32,7 @@ router.post("/create", async (req, res) => {
 
     const { body } = req || null;
 
-    const newTask = new fixedTasksSchema(body);
+    const newTask = new taskSchema(body);
     await newTask.save();
 
     return res.status(200).send(newTask);

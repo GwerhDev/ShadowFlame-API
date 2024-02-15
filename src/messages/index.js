@@ -3,6 +3,7 @@ module.exports = {
     task: {
       created: "Task created successfully",
       deleted: "Task deleted successfully",
+      updated: "Task updated successfully",
     },
     contactMessage: {
       success: "Message sent successfully",

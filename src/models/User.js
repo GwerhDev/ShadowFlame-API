@@ -6,9 +6,7 @@ const userSchema = new mongoose.Schema({
     provider: { type: String, required: true },
     status: { type: String, required: true },
     role: { type: String, required: true },
-    mytasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'MyTasks' }],
-    clantasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ClanTasks' }],
-    myfixedtasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'FixedTasks' }],
+    completedTask: [{ type: mongoose.Schema.Types.ObjectId, ref: 'CompletedTask' }],
 });
 
 module.exports = mongoose.model('User', userSchema);
