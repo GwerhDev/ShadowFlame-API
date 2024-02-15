@@ -10,21 +10,21 @@ router.post("/", async (req, res) => {
     const userToken = req.headers.authorization;
     const decodedToken = await decodeToken(userToken);
 
-    const user = await userSchema.findOne({ _id: decodedToken.data.id })
-      .populate('completedTask');
-
+    const user = await userSchema.findOne({ _id: decodedToken.data.id });
     if (!user) return res.status(404).send({ logged: false, message: message.user.notfound });
 
-    const { completedTask } = user || null;
+    const { date } = req.body || null;
 
     const response = [
       ...await taskSchema.find({ fixed: true }), 
-      ...await taskSchema.find({ date: new Date(req.body.date), user: user._id })
+      ...await taskSchema.find({ date: new Date(date), user: user._id })
     ];
+    
+    console.log(response)
+    const completedTaskDate = await completedTaskSchema.find({ user: user._id, date: new Date(date) });
 
     const formattedResponse = response.map(task => {
       const { _id, title, date, fixed } = task;
-      const completedTaskDate = completedTask.filter(t => t.date.toString() === new Date(req.body.date).toString());
       
       const completedTaskExist = completedTaskDate.find(t => t.task.includes(_id));
       const completed = completedTaskExist? true : false;
