@@ -15,6 +15,8 @@ router.post("/", async (req, res) => {
 
     const { date, type } = req.body || null;
 
+    console.log(date, type)
+
     const response = [
       ...await taskSchema.find({ fixed: true, type }), 
       ...await taskSchema.find({ date: new Date(date), user: user._id, type })

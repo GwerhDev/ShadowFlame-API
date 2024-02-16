@@ -20,7 +20,8 @@ router.get("/", async(req, res) => {
       username,
       discriminator,
       role: user.role,
-      status: user.status
+      status: user.status,
+      warband: user.warband,
     };
     
     return res.status(200).send({ logged: true, userData });

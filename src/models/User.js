@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
     provider: { type: String, required: true },
     status: { type: String, required: true },
     role: { type: String, required: true },
+    warband: { type: mongoose.Schema.Types.ObjectId, ref: 'Warband', required: false },
 });
 
 module.exports = mongoose.model('User', userSchema);
