@@ -23,14 +23,14 @@ router.get('/callback', passport.authenticate('signup-bnet', {
 }));
 
 router.get('/failure', (req, res) => {
-  return res.status(400).redirect(`${clientUrl}/#/signup/register-error`);
+  return res.status(400).redirect(`${clientUrl}/signup/register-error`);
 });
 
 router.get('/success', async (req, res) => {
   try {
     const user = req.session.passport.user;
     const userExist = await userSchema.findOne({ battlenetId: user.battlenetId });
-    if (userExist) return res.status(400).redirect(`${clientUrl}/#/signup/already-registered`);
+    if (userExist) return res.status(400).redirect(`${clientUrl}/signup/already-registered`);
 
     const newUser = new userSchema({
       battlenetId: user.battlenetId,
@@ -43,10 +43,10 @@ router.get('/success', async (req, res) => {
 
     await newUser.save();
 
-    return res.status(200).redirect(`${clientUrl}/#/signup/register-success`);
+    return res.status(200).redirect(`${clientUrl}/signup/register-success`);
   } catch (error) {
     console.error(error);
-    return res.status(500).redirect(`${clientUrl}/#/signup/register-error`);
+    return res.status(500).redirect(`${clientUrl}/signup/register-error`);
   }
 });
 
