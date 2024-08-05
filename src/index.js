@@ -8,10 +8,10 @@ async function main() {
   try {
     await db.connect();
     console.log("Succesfully connected");
-    server.listen(port, ()=> console.log(`server listening on port ${port}`));
+    server.listen(port, ()=> console.log(`Server listening on port ${port}`));
   } catch (error) {
     console.error("Unable to connect to database");
-    server.listen(port, ()=> console.log(`server listening on port ${port}`));
+    server.listen(port, ()=> console.log(`Server listening on port ${port}`));
   }
 };
 

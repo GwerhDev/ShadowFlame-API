@@ -16,7 +16,7 @@ server.use(morgan('dev'));
 server.use((req, res, next) => {
   console.log('request from:', req.headers.origin);
   console.log('method:', req.method);
-  console.log('route:', req.url); 
+  console.log('route:', req.url);
 
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
