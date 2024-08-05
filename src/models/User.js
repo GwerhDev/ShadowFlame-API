@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema({
     battletag: { type: String, required: true },
     provider: { type: String, required: true },
     status: { type: String, required: true },
+    phone: { type: String, required: false },
     role: { type: String, required: true },
     warband: { type: mongoose.Schema.Types.ObjectId, ref: 'Warband', required: false },
 });
