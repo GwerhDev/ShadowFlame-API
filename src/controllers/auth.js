@@ -7,7 +7,7 @@ router.get("/", async(req, res) => {
   try {
     const userToken = req.headers.authorization;
     const decodedToken = await decodeToken(userToken);
-    const user = await userSchema.findOne({ _id: decodedToken.data.id });
+    const user = await userSchema.findOne({ _id: decodedToken.data.id })?.populate("character");
     
     if(!user) return res.status(404).send({ logged: false, message: message.user.notfound });
 
@@ -20,8 +20,9 @@ router.get("/", async(req, res) => {
       username,
       discriminator,
       role: user.role,
+      phone: user.phone,
       status: user.status,
-      warband: user.warband,
+      character: user.character,
     };
     
     return res.status(200).send({ logged: true, userData });

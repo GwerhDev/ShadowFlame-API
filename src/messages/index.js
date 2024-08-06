@@ -1,5 +1,39 @@
 module.exports = {
   message: {
+    character: {
+      create: {
+        success: "Character created successfully",
+        failure: "Failed to create character",
+        error: "Error creating character",
+      },
+      update: {
+        success: "Character updated successfully",
+        failure: "Character not found",
+        error: "Error updating character",
+      },
+      delete: {
+        success: "Character deleted successfully",
+        failure: "Character not found",
+        error: "Error deleting character",
+      },
+    },
+    crest: {
+      create: {
+        success: "Crest created successfully",
+        failure: "Failed to create crest",
+        error: "Error creating crest",
+      },
+      update: {
+        success: "Crest updated successfully",
+        failure: "Crest not found",
+        error: "Error updating crest",
+      },
+      delete: {
+        success: "Crest deleted successfully",
+        failure: "Crest not found",
+        error: "Error deleting crest",
+      },
+    },
     task: {
       created: "Task created successfully",
       deleted: "Task deleted successfully",

@@ -7,12 +7,13 @@ module.exports = {
   roles: {
     admin: "admin",
     member: "member",
+    official: "official",
     clanleader: "clanleader",
     warbandleader: "warbandleader",
   },
   methods: {
-    inner: "inner",
     bnet: "bnet",
+    inner: "inner",
     adminManagement: "admin-management"
   }
 }
