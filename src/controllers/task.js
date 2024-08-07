@@ -15,7 +15,6 @@ router.post("/", async (req, res) => {
 
     const { date, type, character } = req.body || null;
 
-    
     if (!character) {
       const response = [
         ...await taskSchema.find({ fixed: true, type }),
