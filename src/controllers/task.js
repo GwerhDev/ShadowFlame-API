@@ -15,12 +15,13 @@ router.post("/", async (req, res) => {
 
     const { date, type, character } = req.body || null;
 
-    const response = [
-      ...await taskSchema.find({ fixed: true, type }),
-      ...await taskSchema.find({ date: new Date(date), user: user._id, type })
-    ];
-
+    
     if (!character) {
+      const response = [
+        ...await taskSchema.find({ fixed: true, type }),
+        ...await taskSchema.find({ date: new Date(date), user: user._id, type })
+      ];
+
       const completedTaskDate = await completedTaskSchema.find({ user: user._id, date: new Date(date), type });
       const formattedResponse = response.map(task => {
         const { _id, title, date, fixed } = task;
@@ -33,6 +34,11 @@ router.post("/", async (req, res) => {
 
       return res.status(200).send(formattedResponse);
     };
+
+    const response = [
+      ...await taskSchema.find({ fixed: true, type }),
+      ...await taskSchema.find({ date: new Date(date), character: character, type })
+    ];
 
     const completedTaskDate = await completedTaskSchema.find({ character: character, date: new Date(date), type });
 
