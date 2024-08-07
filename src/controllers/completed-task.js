@@ -14,12 +14,24 @@ router.post("/create/:id", async (req, res) => {
     if (!user) return res.status(404).send({ logged: false, message: message.user.notfound });
 
     const { id } = req.params || null;
-    const { date, type } = req.body || null;
+    const { date, type, character } = req.body || null;
+    
+    if (!character) {
+      const completedTaskExist = await completedTaskSchema.findOne({ date: new Date(date), user: user._id, type });
 
-    const completedTaskExist = await completedTaskSchema.findOne({ date: new Date(date), user: user._id, type });
+      if (!completedTaskExist) {
+        await completedTaskSchema.create({ task: id, date: new Date(date), type: type, user: user._id });
+      } else {
+        await completedTaskSchema.findByIdAndUpdate(completedTaskExist._id, { $push: { task: id } });
+      }
+  
+      return res.status(200).send({ message: message.task.updated });  
+    }
+
+    const completedTaskExist = await completedTaskSchema.findOne({ date: new Date(date), character: character, type });
 
     if (!completedTaskExist) {
-      await completedTaskSchema.create({ task: id, date: new Date(date), type: type, user: user._id });
+      await completedTaskSchema.create({ task: id, date: new Date(date), type: type, character: character });
     } else {
       await completedTaskSchema.findByIdAndUpdate(completedTaskExist._id, { $push: { task: id } });
     }
@@ -40,9 +52,15 @@ router.patch("/delete/:id", async (req, res) => {
     if (!user) return res.status(404).send({ logged: false, message: message.user.notfound });
 
     const { id } = req.params || null;
-    const { date, type } = req.body || null;
+    const { date, type, character } = req.body || null;
 
-    await completedTaskSchema.findOneAndUpdate({ date: new Date(date), user: user._id, type }, { $pull: { task: id } });
+    if (!character) {
+      await completedTaskSchema.findOneAndUpdate({ date: new Date(date), user: user._id, type }, { $pull: { task: id } });
+
+      return res.status(200).send({ message: message.task.updated });
+    }
+
+    await completedTaskSchema.findOneAndUpdate({ date: new Date(date), character: character, type }, { $pull: { task: id } });
 
     return res.status(200).send({ message: message.task.updated });
 

@@ -13,20 +13,34 @@ router.post("/", async (req, res) => {
     const user = await userSchema.findOne({ _id: decodedToken.data.id });
     if (!user) return res.status(404).send({ logged: false, message: message.user.notfound });
 
-    const { date, type } = req.body || null;
+    const { date, type, character } = req.body || null;
 
     const response = [
-      ...await taskSchema.find({ fixed: true, type }), 
+      ...await taskSchema.find({ fixed: true, type }),
       ...await taskSchema.find({ date: new Date(date), user: user._id, type })
     ];
-    
-    const completedTaskDate = await completedTaskSchema.find({ user: user._id, date: new Date(date), type });
+
+    if (!character) {
+      const completedTaskDate = await completedTaskSchema.find({ user: user._id, date: new Date(date), type });
+      const formattedResponse = response.map(task => {
+        const { _id, title, date, fixed } = task;
+
+        const completedTaskExist = completedTaskDate.find(t => t.task.includes(_id));
+        const completed = completedTaskExist ? true : false;
+
+        return { _id, title, date, fixed, completed };
+      });
+
+      return res.status(200).send(formattedResponse);
+    };
+
+    const completedTaskDate = await completedTaskSchema.find({ character: character, date: new Date(date), type });
 
     const formattedResponse = response.map(task => {
       const { _id, title, date, fixed } = task;
-      
+
       const completedTaskExist = completedTaskDate.find(t => t.task.includes(_id));
-      const completed = completedTaskExist? true : false;
+      const completed = completedTaskExist ? true : false;
 
       return { _id, title, date, fixed, completed };
     });
@@ -55,7 +69,7 @@ router.post("/create", async (req, res) => {
     return res.status(200).send({ message: message.task.created });
 
   } catch (error) {
-    return res.status(500).send({ error: message.user.error })
+    return res.status(500).send({ error: message.user.error });
   }
 });
 

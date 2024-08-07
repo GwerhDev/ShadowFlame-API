@@ -6,8 +6,8 @@ const crestSchema = new mongoose.Schema({
   quantity: { type: Number, required: true },
   legendaryFound: { type: Boolean, default: false, required: false },
 
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  character: { type: mongoose.Schema.Types.ObjectId, ref: 'Character', required: true },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
+  character: { type: mongoose.Schema.Types.ObjectId, ref: 'Character', required: false },
 });
 
 module.exports = mongoose.model('Crest', crestSchema);
