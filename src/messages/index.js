@@ -102,6 +102,25 @@ module.exports = {
     },
     search: {
       error: "Error",
+    },
+    member: {
+      create: {
+        success: "Member created successfully",
+        failure: "Failed to create member",
+        error: "Error creating member",
+      },
+      update: {
+        success: "Member updated successfully",
+        failure: "Member not found",
+        error: "Error updating member",
+      },
+      delete: {
+        success: "Member deleted successfully",
+        failure: "Member not found",
+        error: "Error deleting member",
+      },
+      notfound: "Member not found",
+      error: "Error processing member request",
     }
   }
 }

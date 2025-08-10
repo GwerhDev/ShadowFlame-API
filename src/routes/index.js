@@ -12,7 +12,6 @@ const signupBnet = require('../controllers/signup-bnet');
 const completedTask = require('../controllers/completed-task');
 
 router.use("/admin", admin);
-router.use("/guide", guide);
 
 router.use("/auth", auth);
 router.use("/task", task);

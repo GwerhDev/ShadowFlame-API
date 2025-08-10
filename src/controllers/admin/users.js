@@ -19,8 +19,6 @@ router.get('/', async(req, res) => {
   }
 });
 
-
-
 router.patch('/:id', async(req, res) => {
   try {
     const userToken = req.headers.authorization;
