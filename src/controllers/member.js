@@ -43,7 +43,7 @@ router.post('/', authorizeRoles(['admin', 'leader', 'official']), async (req, re
   }
 });
 
-router.put('/:id', authorizeRoles(['admin', 'leader', 'official']), async (req, res) => {
+router.patch('/:id', authorizeRoles(['admin', 'leader', 'official']), async (req, res) => {
   try {
     const { id } = req.params;
     const updatedMember = await Member.findByIdAndUpdate(id, req.body, { new: true });
