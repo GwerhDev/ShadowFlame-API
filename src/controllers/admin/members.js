@@ -13,8 +13,8 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const { username, character, role, resonance, class: memberClass, whatsapp } = req.body;
-    const newMember = await Member.create({ username, character, role, resonance, class: memberClass, whatsapp });
+    const { username, character, resonance, class: memberClass, whatsapp } = req.body;
+    const newMember = await Member.create({ username, character, resonance, class: memberClass, whatsapp });
     return res.status(201).send({ message: message.member.create.success, member: newMember });
   } catch (error) {
     return res.status(500).send({ error: message.member.error });
