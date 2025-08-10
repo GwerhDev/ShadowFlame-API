@@ -12,8 +12,8 @@ const matchSchema = new mongoose.Schema({
 
 const shadowWarSchema = new mongoose.Schema({
   date: { type: Date, required: true },
-  result: { type: String, required: true },
-  enemyClan: { type: mongoose.Schema.Types.ObjectId, ref: 'Clan', required: true },
+  result: { type: String, required: false },
+  enemyClan: { type: mongoose.Schema.Types.ObjectId, ref: 'Clan', required: false },
   battle: {
     exalted: [matchSchema],
     eminent: [matchSchema],
