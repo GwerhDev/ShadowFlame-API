@@ -102,15 +102,27 @@ router.patch('/:id', async (req, res) => {
     if (decodedToken?.data?.role !== roles.admin) return res.status(403).json({ message: message.admin.permissionDenied });
 
     const { id } = req.params;
-    const updatedShadowWar = await ShadowWar.findByIdAndUpdate(id, req.body, { new: true });
+    let shadowWar = await ShadowWar.findById(id);
 
-    if (!updatedShadowWar) {
+    if (!shadowWar) {
       return res.status(404).json({ message: 'Shadow War not found' });
     }
 
+    // Apply updates from req.body
+    console.log(req.body)
+
+    if (req.body.enemyClan === '') {
+      req.body.enemyClan = null; // Convert empty string to null for ObjectId
+    }
+
+    Object.assign(shadowWar, req.body);
+
+    const updatedShadowWar = await shadowWar.save(); // Save triggers validation and proper subdocument handling
+
     return res.status(200).json(updatedShadowWar);
   } catch (error) {
-    return res.status(500).json({ error: message.user.error });
+    console.error("Error updating Shadow War:", error);
+    return res.status(500).json({ error: message.user.error, details: error.message });
   }
 });
 
