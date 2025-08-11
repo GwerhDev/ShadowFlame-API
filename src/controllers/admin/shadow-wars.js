@@ -108,9 +108,6 @@ router.patch('/:id', async (req, res) => {
       return res.status(404).json({ message: 'Shadow War not found' });
     }
 
-    // Apply updates from req.body
-    console.log(req.body)
-
     if (req.body.enemyClan === '') {
       req.body.enemyClan = null; // Convert empty string to null for ObjectId
     }

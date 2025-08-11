@@ -22,5 +22,6 @@ router.use("/character", character);
 router.use("/login-bnet", loginBnet);
 router.use("/signup-bnet", signupBnet);
 router.use("/completed-task", completedTask);
+router.use("/shadow-war", require('./shadow-war'));
 
 module.exports = router;
