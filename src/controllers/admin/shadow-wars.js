@@ -30,45 +30,23 @@ router.get('/:id', async (req, res) => {
     if (decodedToken?.data?.role !== roles.admin) return res.status(403).json({ message: message.admin.permissionDenied });
 
     const { id } = req.params;
-    const shadowWar = await ShadowWar.findById(id).populate('enemyClan').populate('battle.exalted.group1.member').populate('battle.exalted.group2.member').populate('battle.eminent.group1.member').populate('battle.eminent.group2.member').populate('battle.famed.group1.member').populate('battle.famed.group2.member').populate('battle.proud.group1.member').populate('battle.proud.group2.member');
+    const shadowWar = await ShadowWar.findById(id)
+      .populate('enemyClan')
+      .populate('confirmed')
+      .populate('battle.exalted.group1.member')
+      .populate('battle.exalted.group2.member')
+      .populate('battle.eminent.group1.member')
+      .populate('battle.eminent.group2.member')
+      .populate('battle.famed.group1.member')
+      .populate('battle.famed.group2.member')
+      .populate('battle.proud.group1.member')
+      .populate('battle.proud.group2.member')
 
     if (!shadowWar) {
       return res.status(404).json({ message: 'Shadow War not found' });
     }
 
     return res.status(200).json(shadowWar);
-  } catch (error) {
-    return res.status(500).json({ error: message.user.error });
-  }
-});
-
-// Find or create shadow war by date
-router.post('/findOrCreateByDate', async (req, res) => {
-  try {
-    const userToken = req.headers.authorization;
-    if (!userToken) return res.status(403).json({ message: message.admin.permissionDenied });
-
-    const decodedToken = await decodeToken(userToken);
-    if (decodedToken?.data?.role !== roles.admin) return res.status(403).json({ message: message.admin.permissionDenied });
-
-    const { date } = req.body; // Date from request body
-
-    if (!date) {
-      return res.status(400).json({ message: 'Date is required' });
-    }
-
-    let shadowWar = await ShadowWar.findOne({ date: new Date(date) });
-
-    if (shadowWar) {
-      return res.status(200).json({ _id: shadowWar._id });
-    } else {
-      const newShadowWar = new ShadowWar({
-        date: new Date(date),
-        // Other fields are now optional in the schema, so no need to provide them here
-      });
-      await newShadowWar.save();
-      return res.status(201).json({ _id: newShadowWar._id });
-    }
   } catch (error) {
     return res.status(500).json({ error: message.user.error });
   }
@@ -115,6 +93,7 @@ router.patch('/:id', async (req, res) => {
     Object.assign(shadowWar, req.body);
 
     const updatedShadowWar = await shadowWar.save(); // Save triggers validation and proper subdocument handling
+    console.log("Updated Shadow War:", updatedShadowWar);
 
     return res.status(200).json(updatedShadowWar);
   } catch (error) {
