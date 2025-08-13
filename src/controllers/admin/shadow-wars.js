@@ -93,7 +93,6 @@ router.patch('/:id', async (req, res) => {
     Object.assign(shadowWar, req.body);
 
     const updatedShadowWar = await shadowWar.save(); // Save triggers validation and proper subdocument handling
-    console.log("Updated Shadow War:", updatedShadowWar);
 
     return res.status(200).json(updatedShadowWar);
   } catch (error) {
