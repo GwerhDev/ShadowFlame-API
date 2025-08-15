@@ -17,7 +17,7 @@ const getNextBattle = async (req, res) => {
       nextBattleDate.setDate(today.getDate() + daysUntilSaturday);
     }
 
-    const nextBattle = await ShadowWar.findOne({
+    let nextBattle = await ShadowWar.findOne({
       date: {
         $gte: nextBattleDate,
         $lt: new Date(nextBattleDate.getTime() + 24 * 60 * 60 * 1000),
@@ -35,7 +35,19 @@ const getNextBattle = async (req, res) => {
       .populate('battle.proud.group2.member');
 
     if (!nextBattle) {
-      return res.status(404).json({ message: 'No se encontró la próxima Shadow War.' });
+      const newShadowWar = new ShadowWar({
+        date: nextBattleDate,
+        enemyClan: null,
+        confirmed: [],
+        battle: {
+          exalted: [],
+          eminent: [],
+          famed: [],
+          proud: []
+        }
+      });
+      await newShadowWar.save();
+      nextBattle = newShadowWar;
     }
 
     res.json(nextBattle);
