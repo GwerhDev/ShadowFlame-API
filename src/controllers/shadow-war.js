@@ -3,19 +3,30 @@ const ShadowWar = require('../models/ShadowWar');
 const getNextBattle = async (req, res) => {
   try {
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const now = new Date();
 
-    const dayOfWeek = today.getDay();
+    const getNextDayOfWeek = (date, dayOfWeek) => {
+      const resultDate = new Date(date.getTime());
+      const daysUntil = (dayOfWeek - date.getDay() + 7) % 7;
+      resultDate.setDate(date.getDate() + daysUntil);
+      return resultDate;
+    };
 
-    let nextBattleDate = new Date(today);
+    let nextThursday = getNextDayOfWeek(today, 4); // 4 = Thursday
+    nextThursday.setHours(19, 30, 0, 0);
 
-    if (dayOfWeek >= 0 && dayOfWeek <= 4) { // Sunday to Thursday
-      const daysUntilThursday = (4 - dayOfWeek + 7) % 7;
-      nextBattleDate.setDate(today.getDate() + daysUntilThursday);
-    } else { // Friday and Saturday
-      const daysUntilSaturday = (6 - dayOfWeek + 7) % 7;
-      nextBattleDate.setDate(today.getDate() + daysUntilSaturday);
+    let nextSaturday = getNextDayOfWeek(today, 6); // 6 = Saturday
+    nextSaturday.setHours(19, 30, 0, 0);
+
+    if (nextThursday < now) {
+      nextThursday.setDate(nextThursday.getDate() + 7);
     }
+
+    if (nextSaturday < now) {
+      nextSaturday.setDate(nextSaturday.getDate() + 7);
+    }
+
+    const nextBattleDate = nextThursday < nextSaturday ? nextThursday : nextSaturday;
 
     let nextBattle = await ShadowWar.findOne({
       date: {
