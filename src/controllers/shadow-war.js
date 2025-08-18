@@ -52,11 +52,12 @@ router.get('/next', async (req, res) => {
         enemyClan: null,
         confirmed: [],
         battle: {
-          exalted: [{ grupo1: [], group2: [] }, { grupo1: [], group2: [] }, { grupo1: [], group2: [] }],
-          eminent: [{ grupo1: [], group2: [] }, { grupo1: [], group2: [] }, { grupo1: [], group2: [] }],
-          famed: [{ grupo1: [], group2: [] }, { grupo1: [], group2: [] }, { grupo1: [], group2: [] }],
-          proud: [{ grupo1: [], group2: [] }, { grupo1: [], group2: [] }, { grupo1: [], group2: [] }],
-        }
+          exalted: [{ grupo1: [], group2: [], result: "pending" }, { grupo1: [], group2: [], result: "pending" }, { grupo1: [], group2: [], result: "pending" }],
+          eminent: [{ grupo1: [], group2: [], result: "pending" }, { grupo1: [], group2: [], result: "pending" }, { grupo1: [], group2: [], result: "pending" }],
+          famed: [{ grupo1: [], group2: [], result: "pending" }, { grupo1: [], group2: [], result: "pending" }, { grupo1: [], group2: [], result: "pending" }],
+          proud: [{ grupo1: [], group2: [], result: "pending" }, { grupo1: [], group2: [], result: "pending" }, { grupo1: [], group2: [], result: "pending" }],
+        },
+        result: "pending"
       });
       await newShadowWar.save();
       nextBattle = newShadowWar;
