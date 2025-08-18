@@ -1,6 +1,7 @@
+const router = require("express").Router();
 const ShadowWar = require('../models/ShadowWar');
 
-const getNextBattle = async (req, res) => {
+router.get('/next', async (req, res) => {
   try {
     const today = new Date();
     const now = new Date();
@@ -51,10 +52,10 @@ const getNextBattle = async (req, res) => {
         enemyClan: null,
         confirmed: [],
         battle: {
-          exalted: [],
-          eminent: [],
-          famed: [],
-          proud: []
+          exalted: [{ grupo1: [], group2: [] }, { grupo1: [], group2: [] }, { grupo1: [], group2: [] }],
+          eminent: [{ grupo1: [], group2: [] }, { grupo1: [], group2: [] }, { grupo1: [], group2: [] }],
+          famed: [{ grupo1: [], group2: [] }, { grupo1: [], group2: [] }, { grupo1: [], group2: [] }],
+          proud: [{ grupo1: [], group2: [] }, { grupo1: [], group2: [] }, { grupo1: [], group2: [] }],
         }
       });
       await newShadowWar.save();
@@ -65,8 +66,6 @@ const getNextBattle = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Error al obtener la próxima Shadow War.', error });
   }
-};
+});
 
-module.exports = {
-  getNextBattle,
-};
+module.exports = router;

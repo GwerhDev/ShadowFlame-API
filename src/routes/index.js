@@ -8,6 +8,7 @@ const guide = require('../controllers/guide');
 const warband = require('../controllers/warband');
 const character = require('../controllers/character');
 const loginBnet = require('../controllers/login-bnet');
+const shadowWar = require('../controllers/shadow-war');
 const signupBnet = require('../controllers/signup-bnet');
 const completedTask = require('../controllers/completed-task');
 
@@ -19,9 +20,9 @@ router.use("/crest", crest);
 router.use("/guide", guide);
 router.use("/warband", warband);
 router.use("/character", character);
+router.use("/shadow-war", shadowWar);
 router.use("/login-bnet", loginBnet);
 router.use("/signup-bnet", signupBnet);
 router.use("/completed-task", completedTask);
-router.use("/shadow-war", require('./shadow-war'));
 
 module.exports = router;
