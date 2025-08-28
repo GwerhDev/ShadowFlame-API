@@ -1,38 +1,42 @@
 const router = require("express").Router();
 const ShadowWar = require('../models/ShadowWar');
+const { timezoneOffset } = require('../config');
 
 router.get('/next', async (req, res) => {
   try {
-    const today = new Date();
-    const now = new Date();
+    const serverNow = new Date();
+    const today = new Date(serverNow.getTime() + timezoneOffset * 60 * 60 * 1000);
+    const now = new Date(serverNow.getTime() + timezoneOffset * 60 * 60 * 1000);
 
     const getNextDayOfWeek = (date, dayOfWeek) => {
       const resultDate = new Date(date.getTime());
-      const daysUntil = (dayOfWeek - date.getDay() + 7) % 7;
-      resultDate.setDate(date.getDate() + daysUntil);
+      const daysUntil = (dayOfWeek - resultDate.getUTCDay() + 7) % 7;
+      resultDate.setUTCDate(resultDate.getUTCDate() + daysUntil);
       return resultDate;
     };
 
     let nextThursday = getNextDayOfWeek(today, 4); // 4 = Thursday
-    nextThursday.setHours(19, 30, 0, 0);
+    nextThursday.setUTCHours(22, 0, 0, 0); // User's requested cutoff time
 
     let nextSaturday = getNextDayOfWeek(today, 6); // 6 = Saturday
-    nextSaturday.setHours(19, 30, 0, 0);
+    nextSaturday.setUTCHours(19, 30, 0, 0); // Keep original time for Saturday
 
     if (nextThursday < now) {
-      nextThursday.setDate(nextThursday.getDate() + 7);
+      nextThursday.setUTCDate(nextThursday.getUTCDate() + 7);
     }
 
     if (nextSaturday < now) {
-      nextSaturday.setDate(nextSaturday.getDate() + 7);
+      nextSaturday.setUTCDate(nextSaturday.getUTCDate() + 7);
     }
 
     const nextBattleDate = nextThursday < nextSaturday ? nextThursday : nextSaturday;
 
+    const nextBattleDateUTC = new Date(nextBattleDate.getTime() - timezoneOffset * 60 * 60 * 1000);
+
     let nextBattle = await ShadowWar.findOne({
       date: {
-        $gte: nextBattleDate,
-        $lt: new Date(nextBattleDate.getTime() + 24 * 60 * 60 * 1000),
+        $gte: nextBattleDateUTC,
+        $lt: new Date(nextBattleDateUTC.getTime() + 24 * 60 * 60 * 1000),
       },
     })
       .populate('confirmed')
@@ -48,7 +52,7 @@ router.get('/next', async (req, res) => {
 
     if (!nextBattle) {
       const newShadowWar = new ShadowWar({
-        date: nextBattleDate,
+        date: nextBattleDateUTC,
         enemyClan: null,
         confirmed: [],
         battle: {

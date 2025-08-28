@@ -16,4 +16,6 @@ module.exports = {
   cohereSecret: process.env.COHERE_SECRET,
 
   privateSecret: process.env.PRIVATE_SECRET,
+
+  timezoneOffset: process.env.TIMEZONE_OFFSET || -3,
 }
