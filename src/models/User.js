@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
   phone: { type: String, required: false },
   role: { type: String, required: true },
 
+  member: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Member', required: false }],
   character: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Character', required: false }],
 });
 

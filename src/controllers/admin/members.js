@@ -35,8 +35,8 @@ router.get('/', authorizeRoles(['admin', 'leader', 'official']), async (req, res
 
 router.post('/', authorizeRoles(['admin', 'leader', 'official']), async (req, res) => {
   try {
-    const { battletag, character, resonance, class: memberClass, whatsapp } = req.body;
-    const newMember = await Member.create({ battletag, character, resonance, class: memberClass, whatsapp });
+    const { character, resonance, class: memberClass, whatsapp } = req.body;
+    const newMember = await Member.create({ character, resonance, class: memberClass, whatsapp });
     return res.status(201).send({ message: message.member.create.success, member: newMember });
   } catch (error) {
     return res.status(500).send({ error: message.member.error });

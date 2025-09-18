@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
 
 const memberSchema = new mongoose.Schema({
-  battletag: { type: String, required: true },
-  character: { type: String, required: true },
-  resonance: { type: Number, required: false },
-  whatsapp: { type: String, required: false },
   class: { type: String, required: false },
+  whatsapp: { type: String, required: false },
+  character: { type: String, required: true },
+  battletag: { type: String, required: false },
+  resonance: { type: Number, required: false },
+  characters: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Character', required: false }],
 });
 
 module.exports = mongoose.model('Member', memberSchema);
