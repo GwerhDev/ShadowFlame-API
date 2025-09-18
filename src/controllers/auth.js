@@ -21,6 +21,7 @@ router.get("/", async(req, res) => {
       discriminator,
       role: user.role,
       phone: user.phone,
+      member: user.member,
       status: user.status,
       character: user.character,
     };
