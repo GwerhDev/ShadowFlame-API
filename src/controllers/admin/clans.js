@@ -55,7 +55,10 @@ router.post('/', async (req, res) => {
     const newClan = new Clan({ name, status, members });
 
     await newClan.save();
-    return res.status(201).json(newClan);
+
+    const clans = await Clan.find();
+
+    return res.status(201).json(clans);
   } catch (error) {
     return res.status(500).json({ error: message.user.error });
   }
@@ -77,7 +80,9 @@ router.patch('/:id', async (req, res) => {
       return res.status(404).json({ message: 'Clan not found' });
     }
 
-    return res.status(200).json(updatedClan);
+    const clans = await Clan.find();
+
+    return res.status(201).json(clans);
   } catch (error) {
     return res.status(500).json({ error: message.user.error });
   }
@@ -98,8 +103,9 @@ router.delete('/:id', async (req, res) => {
     if (!deletedClan) {
       return res.status(404).json({ message: 'Clan not found' });
     }
+    const clans = await Clan.find();
 
-    return res.status(200).json({ message: 'Clan deleted successfully' });
+    return res.status(201).json(clans);
   } catch (error) {
     return res.status(500).json({ error: message.user.error });
   }
