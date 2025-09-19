@@ -23,38 +23,6 @@ router.get('/', async (req, res) => {
       .skip(skip)
       .limit(limit)
       .populate('enemyClan')
-      .populate({
-        path: 'battle.exalted.group1.member',
-        model: 'Member'
-      })
-      .populate({
-        path: 'battle.exalted.group2.member',
-        model: 'Member'
-      })
-      .populate({
-        path: 'battle.eminent.group1.member',
-        model: 'Member'
-      })
-      .populate({
-        path: 'battle.eminent.group2.member',
-        model: 'Member'
-      })
-      .populate({
-        path: 'battle.famed.group1.member',
-        model: 'Member'
-      })
-      .populate({
-        path: 'battle.famed.group2.member',
-        model: 'Member'
-      })
-      .populate({
-        path: 'battle.proud.group1.member',
-        model: 'Member'
-      })
-      .populate({
-        path: 'battle.proud.group2.member',
-        model: 'Member'
-      });
 
     return res.status(200).json({
       total: totalShadowWars,
