@@ -69,6 +69,43 @@ router.get('/', async (req, res) => {
 });
 
 // GET a single shadow war by ID
+router.get('/by-date', async (req, res) => {
+  try {
+    const userToken = req.headers.authorization;
+    if (!userToken) return res.status(403).json({ message: message.admin.permissionDenied });
+
+    const decodedToken = await decodeToken(userToken);
+    if (decodedToken?.data?.role !== roles.admin) return res.status(403).json({ message: message.admin.permissionDenied });
+
+    const { date } = req.query;
+    const searchDate = new Date(date);
+
+    const startOfDay = new Date(searchDate.getFullYear(), searchDate.getMonth(), searchDate.getDate());
+    const endOfDay = new Date(searchDate.getFullYear(), searchDate.getMonth(), searchDate.getDate() + 1);
+
+    const shadowWar = await ShadowWar.findOne({ date: { $gte: startOfDay, $lt: endOfDay } })
+      .populate('enemyClan')
+      .populate('confirmed')
+      .populate('battle.exalted.group1.member')
+      .populate('battle.exalted.group2.member')
+      .populate('battle.eminent.group1.member')
+      .populate('battle.eminent.group2.member')
+      .populate('battle.famed.group1.member')
+      .populate('battle.famed.group2.member')
+      .populate('battle.proud.group1.member')
+      .populate('battle.proud.group2.member');
+
+    if (!shadowWar) {
+      return res.status(404).json({ message: 'Shadow War not found' });
+    }
+
+    return res.status(200).json(shadowWar);
+  } catch (error) {
+    return res.status(500).json({ error: message.user.error });
+  }
+});
+
+// GET a single shadow war by ID
 router.get('/:id', async (req, res) => {
   try {
     const userToken = req.headers.authorization;
