@@ -133,7 +133,17 @@ router.patch('/:id', async (req, res) => {
     if (decodedToken?.data?.role !== roles.admin) return res.status(403).json({ message: message.admin.permissionDenied });
 
     const { id } = req.params;
-    let shadowWar = await ShadowWar.findById(id);
+    let shadowWar = await ShadowWar.findById(id)
+      .populate('enemyClan')
+      .populate('confirmed')
+      .populate('battle.exalted.group1.member')
+      .populate('battle.exalted.group2.member')
+      .populate('battle.eminent.group1.member')
+      .populate('battle.eminent.group2.member')
+      .populate('battle.famed.group1.member')
+      .populate('battle.famed.group2.member')
+      .populate('battle.proud.group1.member')
+      .populate('battle.proud.group2.member');
 
     if (!shadowWar) {
       return res.status(404).json({ message: 'Shadow War not found' });
