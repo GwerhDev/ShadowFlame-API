@@ -13,8 +13,56 @@ router.get('/', async (req, res) => {
     const decodedToken = await decodeToken(userToken);
     if (decodedToken?.data?.role !== roles.admin) return res.status(403).json({ message: message.admin.permissionDenied });
 
-    const shadowWars = await ShadowWar.find().populate('enemyClan').populate('battle.exalted.group1.member').populate('battle.exalted.group2.member').populate('battle.eminent.group1.member').populate('battle.eminent.group2.member').populate('battle.famed.group1.member').populate('battle.famed.group2.member').populate('battle.proud.group1.member').populate('battle.proud.group2.member');
-    return res.status(200).json(shadowWars);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const totalShadowWars = await ShadowWar.countDocuments();
+    const shadowWars = await ShadowWar.find()
+      .sort({ date: -1 })
+      .skip(skip)
+      .limit(limit)
+      .populate('enemyClan')
+      .populate({
+        path: 'battle.exalted.group1.member',
+        model: 'Member'
+      })
+      .populate({
+        path: 'battle.exalted.group2.member',
+        model: 'Member'
+      })
+      .populate({
+        path: 'battle.eminent.group1.member',
+        model: 'Member'
+      })
+      .populate({
+        path: 'battle.eminent.group2.member',
+        model: 'Member'
+      })
+      .populate({
+        path: 'battle.famed.group1.member',
+        model: 'Member'
+      })
+      .populate({
+        path: 'battle.famed.group2.member',
+        model: 'Member'
+      })
+      .populate({
+        path: 'battle.proud.group1.member',
+        model: 'Member'
+      })
+      .populate({
+        path: 'battle.proud.group2.member',
+        model: 'Member'
+      });
+
+    return res.status(200).json({
+      total: totalShadowWars,
+      page,
+      limit,
+      pages: Math.ceil(totalShadowWars / limit),
+      data: shadowWars
+    });
   } catch (error) {
     return res.status(500).json({ error: message.user.error });
   }
